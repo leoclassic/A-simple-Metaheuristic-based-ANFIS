@@ -56,8 +56,10 @@ end
 function output = estimator(X,model)
 Y = inf(size(X,1),1);
 for i = 1:size(X,1)
-    h = -((repmat(X(i,:),model.nRule,1)-model.center)./model.sigma).^2;
-    h = exp(sum(h,2));
+    %h = -((repmat(X(i,:),model.nRule,1)-model.center)./model.sigma).^2;
+    %h = exp(sum(h,2));
+    h = exp(-0.5*((repmat(X(i,:),model.nRule,1)-model.center)./model.sigma).^2);
+    h = prod(h,2);
     mu = h./sum(h);
     Y(i) = (model.weight*X(i,:)'+model.bias)'*mu;
 end
