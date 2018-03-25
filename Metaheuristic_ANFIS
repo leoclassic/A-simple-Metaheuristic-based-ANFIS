@@ -1,4 +1,4 @@
-function [] = Metaheuristic_TSFuzzy
+function [] = Metaheuristic_ANFIS
 data = importdata('BoxJenkins.mat');
 data = [data(3:end,2),data(2:end-1,2),data(1:end-2,2),data(3:end,1),data(2:end-1,1)];
 X = data(:,2:end);
@@ -28,7 +28,7 @@ LB = repmat([lower_input, lower_sigma, lower_weight, lower_bias],1,nRule);
 dim = nRule*(nInput*3+1);
 
 
-objFun = @(solution)TSFuzzy_fitness(solution,nRule,xTrain,tTrain);
+objFun = @(solution)fitnessFcn(solution,nRule,xTrain,tTrain);
 
 solution = PSO(objFun,100,20000,dim,LB,UB);
 
@@ -64,7 +64,7 @@ end
 output = Y;
 end
 
-function fitness = TSFuzzy_fitness(solution,nRule,X,T)
+function fitness = fitnessFcn(solution,nRule,X,T)
 model = constructor(solution,size(X,2),nRule);
 Y = estimator(X,model);
 fitness = (Y-T)'*(Y-T);
